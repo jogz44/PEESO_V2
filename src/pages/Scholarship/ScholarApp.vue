@@ -87,8 +87,8 @@ export default {
 .title {
   font-size: 20px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-   padding: 10px 10px 10px 10px;
-  background-color: #06372C;
+  padding: 10px 10px 10px 10px;
+  background-color: #06372c;
   color: white;
 }
 .scholar-card {

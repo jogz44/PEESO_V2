@@ -19,7 +19,7 @@
           v-model="MySearch"
           color="green"
           style="width: 15%"
-           debounce="300" 
+          debounce="300"
         >
           <template v-slot:prepend>
             <q-icon name="search" />
@@ -304,18 +304,21 @@ export default defineComponent({
         data.append("Query", this.MySearch);
 
         const store = useLoginCheck();
-        store.Retrieve_JobPosting(data).then((res) => {
-          this.jobposting = store.RetreivedJobPosting.data;
-          console.log("Job Posting", this.jobposting);
-        }).catch(error => {
-          console.error("API Error:", error);
-        });
+        store
+          .Retrieve_JobPosting(data)
+          .then((res) => {
+            this.jobposting = store.RetreivedJobPosting.data;
+            console.log("Job Posting", this.jobposting);
+          })
+          .catch((error) => {
+            console.error("API Error:", error);
+          });
       }
-    }
+    },
   },
 
   watch: {
-    MySearch: 'searchJobs', // Call searchJobs whenever MySearch changes
+    MySearch: "searchJobs", // Call searchJobs whenever MySearch changes
   },
 
   created() {

@@ -29,8 +29,7 @@
             style="margin: 3px"
             @click="openImage(src, idx)"
           >
-
-          <!-- <div class="absolute-bottom text-subtitle text-center" dense>
+            <!-- <div class="absolute-bottom text-subtitle text-center" dense>
               {{ src.ID }}
           </div> -->
           </q-img>
@@ -147,6 +146,10 @@ export default {
   margin-top: 10px;
   height: 200px;
   width: 90%;
+  outline: 1px solid rgb(171, 213, 181); /* or any color and size you want */
+  box-shadow: 0px 1px 10px #06372c; /* Adds a shadow */
+  opacity: 0.9; /* Sets the opacity (between 0 and 1) */
+  border-radius: 5px; /* Rounds the corners (adjust value as needed) */
 }
 
 .q-carousel-slide {
@@ -157,11 +160,12 @@ export default {
 }
 
 .my-story-img {
-  height: 200px;
+  height: 180px;
   object-fit: contain;
   border-radius: 3%;
   cursor: pointer;
   background-color: rgb(171, 213, 181);
+  outline: 1px solid rgb(171, 213, 181);
 }
 
 .full-screen-image {

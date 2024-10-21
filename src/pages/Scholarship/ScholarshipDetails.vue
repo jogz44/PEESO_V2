@@ -15,7 +15,7 @@
           style="text-align: left"
           class=""
           icon="arrow_back"
-         
+          @click="$router.push({ path: '/ScholarshipApplications' })"
         ></q-btn>
         <p style="font-size: 22px; align-self: center">TES Scholarship</p>
         <!-- if done "APPLY FOR THIS JOB" , then it shall be changed to "APPLIED" -->

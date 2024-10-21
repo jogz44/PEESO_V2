@@ -1,12 +1,29 @@
 <template>
   <div class="profile-card">
+    <q-card-section
+      style="
+        background-color: #06372c;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      "
+      class="text-white"
+    >
+      <q-btn
+        flat
+        style="text-align: left"
+        class=""
+        icon="arrow_back"
+        @click="$router.push({ path: '/Main' })"
+      ></q-btn>
+    </q-card-section>
     <div class="profile-container">
       <div class="profile-avatar">
         <q-avatar class="avatar">
           <img src="https://cdn.quasar.dev/img/avatar2.jpg" />
         </q-avatar>
       </div>
-      <div class="profile-details" style="">
+      <div class="profile-details" style="margin-bottom: -20px">
         <h2 class="title" style="margin-bottom: -10px"><b>John Doe </b></h2>
         <p class="title">Web Development, JavaScript, CSS, HTML</p>
         <br />
@@ -26,6 +43,7 @@
       </div>
       <div>
         <q-btn
+          style="margin-top: 295px"
           outline
           rounded
           color="warning"
@@ -39,7 +57,7 @@
   <div class="row skill-card">
     <div class="col-12 col-sm-6 col-md-6 col-lg-6">
       <q-card class="q-ma-sm">
-        <q-card-section style="background-color: #06372C; color: white"
+        <q-card-section style="background-color: #06372c; color: white"
           >BOOKED MARK JOB POSTS</q-card-section
         >
         <q-separator />
@@ -57,7 +75,7 @@
     </div>
     <div class="col-12 col-sm-6 col-md-6 col-lg-6">
       <q-card class="q-ma-sm">
-        <q-card-section style="background-color: #06372C; color: white"
+        <q-card-section style="background-color: #06372c; color: white"
           >EMPLOYERS</q-card-section
         >
         <q-separator />
@@ -178,8 +196,9 @@ export default {
 .profile-container {
   display: flex;
   align-items: center;
-  background: linear-gradient(to bottom, #06372C, 50%, #ffffff 50%);
+  background: linear-gradient(to bottom, #06372c, 50%, #ffffff 50%);
   padding: 20px;
+  margin-top: -50px;
 }
 
 .profile-avatar {
@@ -191,6 +210,7 @@ export default {
   background: white;
   padding: 10px;
   border-radius: 50%;
+  outline: 2px solid darkgoldenrod;
 }
 
 .avatar {
