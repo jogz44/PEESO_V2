@@ -48,7 +48,7 @@
         </q-card>
       </div>
     </div>
-     <div v-show="EditProfile">
+    <div v-show="EditProfile">
       <LearningDevelopment />
     </div>
     <!-- DIALOG FOR L&D DELETE -->
@@ -81,7 +81,7 @@
   </div>
 </template>
 <script>
-import LearningDevelopment from '../EditPDS/LearningDevelopment.vue';
+import LearningDevelopment from "../EditPDS/LearningDevelopment.vue";
 import { useLoginCheck } from "src/stores/SignUp_Store";
 export default {
   data() {
@@ -89,10 +89,10 @@ export default {
       ld: true,
       EditProfile: false,
       model: "",
-       DeleteLearningDialog: false,
+      DeleteLearningDialog: false,
       LearningID: "",
       personal: [],
-        trainingsdata: [],
+      trainingsdata: [],
       userinfo: [],
       columns: [
         {
@@ -139,7 +139,7 @@ export default {
           field: "Conductor",
           sortable: true,
         },
-         {
+        {
           name: "actions",
           label: "ACTIONS",
           field: "actions",
@@ -148,16 +148,18 @@ export default {
       ],
     };
   },
-     created() {
+  created() {
     const store = useLoginCheck();
-    this.userinfo = store.RetrievedData;
+    this.userinfo = Array.isArray(store.RetrievedData.data)
+      ? store.RetrievedData.data[0]
+      : store.RetrievedData.data;
 
     let data = new FormData();
     data.append("action", "view");
-    data.append("ControlNo", this.userinfo.data[0].ControlNo);
+    data.append("ControlNo", this.userinfo.ControlNo);
 
     store.TrainingData(data).then((res) => {
-      this.trainingsdata = store.LD;
+      this.trainingsdata = store.LD.data;
       console.log("TrainingData => ", this.trainingsdata);
     });
   },

@@ -2,10 +2,29 @@
   <div class="scrollable-container">
     <div class="profile-card">
       <div class="row profile-container">
-        <div class="profile-avatar">
-          <q-avatar class="avatar">
-            <img src="https://cdn.quasar.dev/img/avatar2.jpg" />
+        <div class="profile-avatar relative-position">
+          <q-avatar
+            @click="triggerFileUpload"
+            style="cursor: pointer"
+            class="avatar"
+          >
+            <img :src="imageUrl" />
           </q-avatar>
+          <input
+            type="file"
+            ref="fileInput"
+            style="display: none"
+            @change="handleFileUpload"
+            accept="image/*"
+          />
+
+          <q-icon
+            @click="triggerFileUpload"
+            name="camera_alt"
+            size="24px"
+            class="camera-icon absolute-bottom-right"
+            style="cursor: pointer; border-radius: 50%; padding: 4px"
+          />
         </div>
         <!-- <div class="col-12" style="text-align: center">
           <p style="font-weight: 500; margin-bottom: -2px">
@@ -91,7 +110,7 @@
               align="left"
               class="q-mt-xs"
               :class="{
-                'active-button': activeButton === 'FAMILY BACKGROUND',
+                'active-button': activeButton == 'FAMILY BACKGROUND',
               }"
               style="width: 95%; margin-bottom: -10px"
               @click="familyback()"
@@ -263,12 +282,21 @@ import MemberAss from "../PersonalDateSheet/MemberAss.vue";
 import OtherInf from "../PersonalDateSheet/OtherInf.vue";
 import ReferencePage from "../PersonalDateSheet/ReferencePage.vue";
 import { useLoginCheck } from "src/stores/SignUp_Store";
+import { useQuasar } from "quasar";
 export default {
   data() {
     return {
+      /*   retrievedLogin: null, */
+      userinfo: [],
+      Profilepic: [],
+      transferUser: [],
+      imageUrl: "/upload.jpg", // Set default image URL
+      file: null,
+
       retrievedLogin: "",
       // userinfo: [],
       activeButton: "PERSONAL INFORMATION",
+      /*  imageUrl: "/upload.jpg", */
 
       dataTable: [
         { id: "", name: "", age: "" },
@@ -305,12 +333,16 @@ export default {
   },
 
   setup() {
-    const retrievedLogin = ref(null); // Corrected spelling
+    const $q = useQuasar();
+    /*  const $q = useQuasar();
+    const retrievedLogin = ref(null);
     const userinfo = ref(null);
     const store = useLoginCheck();
+    const imageUrl = ref("/upload.jpg");
+    const transferUser = ref(null);
 
     retrievedLogin.value = localStorage.getItem("Login");
-    console.log("Retrieved Login:", retrievedLogin.value); // Check the retrieved login
+    console.log("Retrieved Login:", retrievedLogin.value);
 
     let data = new FormData();
     data.append("LoginID", retrievedLogin.value);
@@ -318,29 +350,103 @@ export default {
     store.RetrievedData_function(data).then((res) => {
       userinfo.value = store.RetrievedData;
       console.log("userinfo:", userinfo.value);
-    });
+      if (userinfo.value && userinfo.value.data && userinfo.value.data[0]) {
+        imageUrl.value = userinfo.value.data[0].pic;
+        console.log("ImageURL", imageUrl.value);
+      }
+
+      transferUser.value = userinfo.value.data[0].PMID;
+      console.log("transer User", transferUser.value);
+    }); */
 
     return {
+      /*   transferUser,
       userinfo,
-      store,
+      imageUrl,
+      store, */
+      showSuccessfullyUPdated() {
+        $q.notify({
+          icon: "star_half",
+          color: "green",
+          message: "Sucessfully Updated",
+          position: "center",
+          timeout: "1500",
+        });
+      },
     };
   },
 
-  // created() {
-  //   this.retrievedLogin = localStorage.getItem("Login");
-  //   console.log("Retrieved Login:", this.retrievedLogin); // Check the retrieved login
+  created() {
+    const store = useLoginCheck(); // Assuming you are using Vuex or similar store
+    this.retrievedLogin = localStorage.getItem("Login");
+    console.log("Retrieved Login:", this.retrievedLogin); // Check the retrieved login
 
-  //   const store = useLoginCheck();
-  //   let data = new FormData();
-  //   data.append("LoginID", this.retrievedLogin);
+    let data = new FormData();
+    data.append("LoginID", this.retrievedLogin);
 
-  //   store.RetrievedData_function(data).then((res) => {
-  //     this.userinfo = store.RetrievedData;
-  //     console.log("userinfo:", this.userinfo);
-  //   });
-  // },
+    store.RetrievedData_function(data).then((res) => {
+      this.userinfo = store.RetrievedData;
+      console.log("userinfo:", this.userinfo);
+      if (this.userinfo && this.userinfo.data && this.userinfo.data[0]) {
+        this.imageUrl = this.userinfo.data[0].pic; // Update imageUrl
+        console.log("ImageURL", this.imageUrl);
+      }
+
+      this.transferUser = this.userinfo.data[0];
+      console.log("transfer User", this.transferUser);
+
+      const store2 = useLoginCheck();
+      let data2 = new FormData();
+      data2.append("action", "view");
+      data2.append("ControlNo", this.transferUser.ControlNo);
+      store2.PersonalData(data2).then((res) => {
+        this.Profilepic = store2.PI;
+        console.log("Profile PIC", this.Profilepic);
+        this.imageUrl = this.Profilepic.personalRecord.pic;
+      });
+    });
+  },
 
   methods: {
+    async ImagetoDatabase() {
+      const store = useLoginCheck();
+      let data = new FormData();
+      if (this.file) {
+        data.append("file", this.file);
+      }
+      data.append("userid", this.transferUser.PMID);
+
+      store.Store_ImageDatabase(data).then((res) => {
+        /*  console.log("Response Store Image:", res.data); */
+        const store2 = useLoginCheck();
+        let data2 = new FormData();
+        data2.append("action", "view");
+        data2.append("ControlNo", this.transferUser.ControlNo);
+        store2.PersonalData(data2).then((res) => {
+          this.Profilepic = store2.PI;
+          console.log("Profile PIC", this.Profilepic);
+          this.imageUrl = this.Profilepic.personalRecord.pic;
+          this.showSuccessfullyUPdated();
+        });
+      });
+    },
+
+    triggerFileUpload() {
+      this.$refs.fileInput.click();
+    },
+    handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.file = file; // bind the file object to the data property
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.imageUrl = e.target.result; // set the image URL to the loaded file
+          this.ImagetoDatabase();
+        };
+        reader.readAsDataURL(file); // read the file as a data URL
+      }
+    },
+
     handleSelectionChange(selectedOption) {
       console.log("Selected Option:", selectedOption.value);
       this.activeButton = selectedOption.value;
@@ -405,6 +511,17 @@ export default {
 </script>
 
 <style scoped>
+.relative-position {
+  position: relative;
+}
+
+.camera-icon {
+  right: 0;
+  bottom: 20px;
+  background-color: black;
+  color: white;
+}
+
 .scrollable-container {
   max-height: 93vh;
   overflow-y: auto;

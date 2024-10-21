@@ -87,13 +87,18 @@
             selected_Details.Status !== 'RESCHEDULE'
           "
         >
-          <q-btn color="green" class="" v-model="AcceptBtn" @click="Accept()"
+          <q-btn
+            color="green"
+            class="q-ma-sm"
+            v-model="AcceptBtn"
+            @click="Accept()"
             >Accept</q-btn
           >
           <q-btn
             outline
             color="warning"
             class="q-ma-sm"
+            v-if="selected_Details.Status !== 'NEW SCHEDULE'"
             @click="reschedule = true"
             >Re-schedule</q-btn
           >
@@ -115,7 +120,7 @@
         <div class="row">
           <div class="col-12">
             <p>Reason for Re-scheduling:</p>
-            <q-input v-model="text" dense filled autogrow />
+            <q-input v-model="txtremarks" dense filled autogrow />
           </div>
           <div class="col-12 q-mt-sm">
             Date Preferred:
@@ -210,9 +215,9 @@
         <div class="row">
           <div class="col-12">
             <p>Reason for Declining:</p>
-            <q-input v-model="text" filled autogrow />
+            <q-input v-model="txtdecline" filled autogrow />
           </div>
-          <div class="col-12 q-mt-sm">
+          <!--  <div class="col-12 q-mt-sm">
             Date Preferred:
             <div class="row text-center">
               <div class="col-6">
@@ -227,7 +232,7 @@
                 <q-time v-model="time" mask="HH:mm" color="green" dense />
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </q-card-section>
 
@@ -257,6 +262,8 @@ export default {
       selected_Details: [],
       appointment: [],
       Schedule: [],
+      txtremarks: "",
+      txtdecline: "",
 
       pagination: {
         rowsPerPage: 5, // This controls how many rows are shown per page; set to the number you want to show
@@ -304,11 +311,11 @@ export default {
       let data = new FormData();
 
       data.append("AppointmentID", this.selected_Details.ID);
-      data.append("action", "RESCHEDULE");
+      data.append("Action", "RESCHEDULE");
       data.append("Appointment_date", this.date);
       data.append("Appointment_time", this.time);
       data.append("status", "RESCHEDULE");
-      data.append("remarks", "");
+      data.append("remarks", this.txtremarks);
       console.log("Appointment ID =>", this.selected_Details.ID);
 
       store.AppointmentSched(data).then((res) => {
@@ -342,10 +349,10 @@ export default {
 
       data.append("AppointmentID", this.selected_Details.ID);
       data.append("action", "DECLINE");
-      data.append("Appointment_date", this.date);
-      data.append("Appointment_time", this.time);
+      /*  data.append("Appointment_date", this.date);
+      data.append("Appointment_time", this.time); */
       data.append("status", "DECLINE");
-      data.append("remarks", "");
+      data.append("remarks", this.txtdecline);
       console.log("Appointment ID =>", this.selected_Details.ID);
 
       store.AppointmentSched(data).then((res) => {

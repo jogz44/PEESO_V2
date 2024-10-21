@@ -28,7 +28,7 @@
                   title=""
                   wrap-cells=""
                   dense
-                  :rows="personal"
+                  :rows="WorkExpArray"
                   :columns="columns"
                   row-key="id"
                 >
@@ -85,6 +85,7 @@
   </div>
 </template>
 <script>
+import { useLoginCheck } from "src/stores/SignUp_Store";
 import WorkExperience from "../EditPDS/WorkExperience.vue";
 export default {
   data() {
@@ -95,13 +96,15 @@ export default {
       ExperienceID: "",
       model: "",
       personal: [],
+      WorkExpArray: [],
+
       columns: [
         {
           name: "InclusiveDateFrom",
           required: true,
           label: "From",
           align: "left",
-          field: "wfrom",
+          field: "WFrom",
           format: (val) => `${val}`,
           sortable: true,
         },
@@ -109,28 +112,30 @@ export default {
           name: "InclusiveDateTo",
           align: "center",
           label: "To",
-          field: "wto",
+          field: "WTo",
           sortable: true,
         },
         {
           name: "PositionTitle",
           align: "center",
           label: "PositionTitle",
-          field: "wposition",
+          field: "WPosition",
           sortable: true,
         },
+
         {
-          name: "Department",
+          name: "WCompany",
           align: "center",
-          label: "Department",
-          field: "wcompany",
+          label: "Company",
+          field: "WCompany",
           sortable: true,
         },
+
         {
           name: "MonthlySalary",
           align: "center",
           label: "Monthly Salary",
-          field: "wsalary",
+          field: "WSalary",
           format: (val) => {
             const numVal = Number(val);
             if (!isNaN(numVal)) {
@@ -147,23 +152,17 @@ export default {
           name: "SalaryGrade",
           align: "center",
           label: "Salary Grade",
-          field: "wgrade",
+          field: "WGrade",
           sortable: true,
         },
         {
-          name: "StatusofAppointment",
+          name: "Status",
           align: "center",
-          label: "Status of Appointment",
-          field: "status",
+          label: "Status",
+          field: "Status",
           sortable: true,
         },
-        {
-          name: "GovtService",
-          align: "center",
-          label: "Gov't Service",
-          field: "wgov",
-          sortable: true,
-        },
+
         {
           name: "actions",
           label: "ACTIONS",
@@ -180,6 +179,25 @@ export default {
       this.we = false;
     },
   },
+
+  created() {
+    const store = useLoginCheck();
+    this.userinfo = Array.isArray(store.RetrievedData.data)
+      ? store.RetrievedData.data[0]
+      : store.RetrievedData.data;
+    console.log("userinfo", this.userinfo);
+
+    let data = new FormData();
+    data.append("action", "view");
+    data.append("ControlNo", this.userinfo.ControlNo);
+
+    store.WorkExperience_Data(data).then((res) => {
+      this.WorkExpArray = store.WE;
+
+      console.log("WorkExpe => ", this.WorkExpArray);
+    });
+  },
+
   components: {
     WorkExperience,
   },

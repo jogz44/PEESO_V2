@@ -81,7 +81,6 @@
   </div>
 </template>
 <script>
-
 import { useLoginCheck } from "src/stores/SignUp_Store";
 import CivilService from "../EditPDS/CivilService.vue";
 
@@ -98,7 +97,7 @@ export default {
       EditProfile: false,
       columns: [
         {
-          name: "Eligibility",
+          name: "CivilServe",
           required: true,
           label: "Eligibility",
           align: "left",
@@ -107,47 +106,41 @@ export default {
           sortable: true,
         },
         {
-          name: "Rating",
+          name: "Rates",
           align: "center",
           label: "Rating (if Applicable)",
           field: "Rates",
-          format: (val) => {
-            const numVal = Number(val);
-            if (!isNaN(numVal)) {
-              return `${numVal.toFixed(2)}`;
-            }
-            return val;
-          },
+
           sortable: true,
         },
         {
-          name: "DateofExamination",
+          name: "Dates",
           align: "center",
           label: "Date of Examination",
           field: "Dates",
           sortable: true,
         },
         {
-          name: "PlaceofExamination",
+          name: "Place",
           align: "center",
           label: "Place of Examination",
           field: "Place",
           sortable: true,
         },
         {
-          name: "LicenseNumber",
+          name: "LDate",
           align: "center",
           label: "License Number",
-          field: "LNumber",
+          field: "LDate",
           sortable: true,
         },
-        {
+        /*  {
           name: "DateofValidity",
           align: "center",
           label: "Date of Validity",
           field: "LDate",
           sortable: true,
-        },
+        }, */
         {
           name: "actions",
           label: "ACTIONS",
@@ -157,16 +150,18 @@ export default {
       ],
     };
   },
-   created() {
+  created() {
     const store = useLoginCheck();
-    this.userinfo = store.RetrievedData;
+    this.userinfo = Array.isArray(store.RetrievedData.data)
+      ? store.RetrievedData.data[0]
+      : store.RetrievedData.data;
 
     let data = new FormData();
     data.append("action", "view");
-    data.append("ControlNo", this.userinfo.data[0].ControlNo);
+    data.append("ControlNo", this.userinfo.ControlNo);
 
     store.CivilData(data).then((res) => {
-      this.civildata = store.CS;
+      this.civildata = store.CS.data;
       console.log("CivilData => ", this.civildata);
     });
   },

@@ -116,14 +116,16 @@ export default {
   },
   created() {
     const store = useLoginCheck();
-    this.userinfo = store.RetrievedData;
+    this.userinfo = Array.isArray(store.RetrievedData.data)
+      ? store.RetrievedData.data[0]
+      : store.RetrievedData.data;
 
     let data = new FormData();
+    data.append("ControlNo", this.userinfo.ControlNo);
     data.append("action", "view");
-    data.append("ControlNo", this.userinfo.data[0].ControlNo);
 
     store.NonacademicData(data).then((res) => {
-      this.nonacademicdata = store.NON;
+      this.nonacademicdata = store.NON.data;
       console.log("NonacademicData => ", this.nonacademicdata);
     });
   },

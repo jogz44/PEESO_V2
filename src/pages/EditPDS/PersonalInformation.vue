@@ -596,7 +596,7 @@ export default {
     this.userinfo = store.RetrievedData;
 
     let data = new FormData();
-    data.append("action", "edit");
+    data.append("action", "view");
     data.append("ControlNo", this.userinfo.data[0].ControlNo);
 
     store.PersonalData(data).then((res) => {

@@ -43,9 +43,10 @@
                 style="justify-content: space-around"
                 class="publicEducation"
               >
-                Public Employment Services and Capability Development Office (P.E.S.C.D.O) is a government agency tasked
-                in providing education and employment services under the
-                Department of Labor and Employment (DOLE).
+                Public Employment Services and Capability Development Office
+                (P.E.S.C.D.O) is a government agency tasked in providing
+                education and employment services under the Department of Labor
+                and Employment (DOLE).
               </p>
             </div>
           </div>
@@ -85,6 +86,7 @@
                   v-model="txtusername"
                   placeholder="UserName"
                   class="custom-input"
+                  @keydown.enter="LOGIN"
                 />
                 <q-icon name="people" class="input-icon" />
               </div>
@@ -96,6 +98,7 @@
                   v-model="txtpassword"
                   class="custom-input"
                   placeholder="Password"
+                  @keydown.enter="LOGIN"
                 />
               </div>
 

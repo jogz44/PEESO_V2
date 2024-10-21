@@ -145,6 +145,7 @@ export default {
 
 
   .hidememobile {
+  
     display: none;
   }
 

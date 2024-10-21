@@ -115,14 +115,16 @@ export default {
   },
   created() {
     const store = useLoginCheck();
-    this.userinfo = store.RetrievedData;
+    this.userinfo = Array.isArray(store.RetrievedData.data)
+      ? store.RetrievedData.data[0]
+      : store.RetrievedData.data;
 
     let data = new FormData();
     data.append("action", "view");
-    data.append("ControlNo", this.userinfo.data[0].ControlNo);
+    data.append("ControlNo", this.userinfo.ControlNo);
 
     store.SkillsData(data).then((res) => {
-      this.skillsdata = store.SH;
+      this.skillsdata = store.SH.data;
       console.log("SkillsData => ", this.skillsdata);
     });
   },

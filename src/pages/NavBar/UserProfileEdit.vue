@@ -1,107 +1,252 @@
 <template>
   <div class="profile-card">
     <div class="row profile-container">
-      <div class="profile-avatar">
-        <q-avatar class="avatar">
-          <img src="https://cdn.quasar.dev/img/avatar2.jpg" />
+      <div class="profile-avatar relative-position">
+        <q-avatar
+          @click="triggerFileUpload"
+          class="avatar"
+          style="cursor: pointer"
+        >
+          <img :src="imageUrl" />
         </q-avatar>
+        <input
+          type="file"
+          ref="fileInput"
+          style="display: none"
+          @change="handleFileUpload"
+          accept="image/*"
+        />
+        <q-icon
+          @click="triggerFileUpload"
+          name="camera_alt"
+          size="24px"
+          class="camera-icon absolute-bottom-right"
+          style="cursor: pointer; border-radius: 50%; padding: 4px"
+        />
       </div>
+      <!--       <q-btn @click="ImagetoDatabase" color=""> Update </q-btn> -->
       <div class="col-12" style="text-align: center">
         <p style="font-weight: 500; margin-bottom: -2px">
-          <span
-
-          >
-            {{ userinfo.data[0].Firstname }}  {{ userinfo.data[0].Surname }}
+          <span style="font-size: 15px">
+            {{ transferUser.Firstname }} {{ transferUser.Surname }}
           </span>
         </p>
         <p>Web Development, JavaScript, CSS, HTML</p>
       </div>
-      <!-- <div class="profile-details">
-        <h2 class="title"><b>John Doe</b></h2>
-        <p class="title">Web Development, JavaScript, CSS, HTML</p>
-        <br>
-        <p style="margin-bottom: -10px; margin-top: 20px; font-weight: 500;">SALARY</p>
-        <p>P 10,000 / month</p>
-        <p style="margin-bottom: -10px; margin-top: -2px; font-weight: 500">EDUCATION</p>
-        <p>College Level</p>
-        <p style="margin-bottom: -10px; margin-top: -2px; font-weight: 500">SKILLS</p>
-        <p>Programming , Technical</p>
-        <q-btn outline rounded color="green" label="Edit Profile" icon="edit"/>
-      </div> -->
     </div>
   </div>
+
+  <div class="row">
+    <q-card class="col-10 skill-card">
+      <q-card-section style=""
+        ><p style="font-weight: 500; font-size: 16px">Basic Information</p>
+
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <p>
+              Age <br />
+              <b>{{ calculateAge(transferUser.BirthDate) }}</b>
+            </p>
+            <p>
+              Gender <br />
+              <b>{{ transferUser.Sex }}</b>
+            </p>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <p>
+              Email Address <br />
+              <b>{{ transferUser.Email }}</b>
+            </p>
+
+            <p>
+              Address <br />
+              <b>{{ transferUser.Address }}</b>
+            </p>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <p>
+              Contact Number <br />
+              <b>{{ transferUser.ContactNo }}</b>
+            </p>
+
+            <p>
+              Civil Status <br />
+              <b>{{ transferUser.CivilStatus }}</b>
+            </p>
+          </div>
+        </div>
+      </q-card-section>
+    </q-card>
+  </div>
+
   <div class="row skill-card">
-    <div class="col-12 col-sm-8 col-md-8 col-lg-8">
-      <q-card class="q-ma-sm">
-        <q-card-section style=""
-          ><p style="font-weight: 500; font-size: 16px">Profile Description</p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Vestibulum rhoncus est pellentesque elit ullamcorper dignissim. Sit
-            amet commodo nulla facilisi nullam vehicula ipsum a. Et odio
-            pellentesque diam volutpat commodo sed egestas egestas fringilla. A
-            iaculis at erat pellentesque adipiscing. Ut venenatis tellus in
-            metus vulputate eu scelerisque felis imperdiet. Facilisi etiam
-            dignissim diam quis. Cras fermentum odio eu feugiat pretium nibh
-            ipsum consequat nisl. Integer feugiat scelerisque varius morbi enim
-            nunc faucibus a pellentesque. Eu augue ut lectus arcu bibendum at.
-            Lectus quam id leo in vitae turpis massa sed. Libero volutpat sed
-            cras ornare arcu. Dictum at tempor commodo ullamcorper a lacus
-            vestibulum. Scelerisque in dictum non consectetur a erat nam at.
-            Amet aliquam id diam maecenas ultricies mi.
+    <div class="col-11 col-sm-4 col-md-2 col-lg-3 col-xl-3">
+      <q-card class="q-ma-sm" style="height: 300px; overflow: auto">
+        <q-card-section style="margin-left: 10px">
+          <p
+            style="
+              font-weight: 500;
+              font-size: 16px;
+              color: darkgreen;
+              position: sticky;
+              top: 10px;
+              background-color: white;
+              z-index: 1;
+            "
+          >
+            Tranings
           </p>
+          <div
+            v-for="(train, index) in trainingsdata"
+            :key="index"
+            style="margin-top: -10px; margin: 1px; margin-left: 10px"
+          >
+            <ul style="list-style-type: disc; padding-left: 20px">
+              <li style="font-weight: 500; font-size: 16px">
+                {{ train.Training }}
+              </li>
+            </ul>
+            <p style="margin-left: 20px; margin-top: -10px">
+              From: <b>{{ train.DateFrom }}</b>
+            </p>
+            <p style="margin-left: 20px; margin-top: -10px">
+              To: <b>{{ train.DateTo }}</b>
+            </p>
+          </div>
         </q-card-section>
       </q-card>
     </div>
-    <div class="col-12 col-sm-4 col-md-4 col-lg-4">
-      <q-card class="q-ma-sm">
-        <q-card-section style=""
-          ><p style="font-weight: 500; font-size: 16px">Basic Information</p>
-          <p>
-            Age <br />
-            <b>25</b>
-          </p>
-          <p>
-            Gender <br />
-            <b>{{ userinfo.data[0].Sex }}</b>
-          </p>
-          <p>
-            Email Address <br />
-            <b>{{ userinfo.data[0].Email }}</b>
-          </p>
-           <!-- <p>
-            User Name <br />
-            <b>{{ userinfo.data[0].username }}</b>
-          </p> -->
-          <p>
-            Mailing Address <br />
-            <b>{{ userinfo.data[0].Address }}</b>
-          </p>
-        </q-card-section>
-        <q-card-section>
-          <p style="font-weight: 500; font-size: 16px">Login Information</p>
-           <p>
-            Username <br />
-            <b>25</b>
-          </p>
-          <p>
-            Password <br />
-            
-          </p>
-        </q-card-section>
-      </q-card>
+    <div class="col-12 col-sm-8 col-md-8 col-lg-9">
+      <div class="row">
+        <!-- Experience Card -->
+        <q-card
+          class="q-ma-sm col-10 col-sm-11 col-md-5 col-xl-5 col-lg-4 classCard"
+          style="height: 300px; overflow: auto"
+        >
+          <q-card-section style="margin-left: 10px">
+            <p
+              style="
+                font-weight: 500;
+                font-size: 16px;
+                color: darkgreen;
+                position: sticky;
+                top: 10px;
+                background-color: white;
+                z-index: 1;
+              "
+            >
+              Experience
+            </p>
+            <div
+              v-for="(work, index) in WorkExpArray"
+              :key="index"
+              style="margin-top: -10px; margin: 1px; margin-left: 10px"
+            >
+              <ul style="list-style-type: disc; padding-left: 20px">
+                <li style="font-weight: 500; font-size: 16px">
+                  {{ work.WPosition }}
+                </li>
+              </ul>
+              <p style="margin-left: 20px; margin-top: -10px">
+                {{ work.WCompany }} - {{ work.WFrom }}-{{ work.WTo }}
+              </p>
+            </div>
+          </q-card-section>
+        </q-card>
+
+        <!-- Education Card -->
+        <q-card
+          class="q-ma-sm col-10 col-sm-5 col-md-3 col-xl-3 col-lg-3"
+          style="height: 300px; overflow: auto"
+        >
+          <q-card-section style="margin-left: 10px">
+            <p
+              style="
+                font-weight: 500;
+                font-size: 16px;
+                color: darkgreen;
+                position: sticky;
+                top: 10px;
+                background-color: white;
+                z-index: 1;
+              "
+            >
+              Education
+            </p>
+            <div
+              v-for="(Edc, index) in EducArray"
+              :key="index"
+              style="margin-top: -10px; margin: 1px; margin-left: 10px"
+            >
+              <ul style="list-style-type: disc; padding-left: 20px">
+                <li style="font-weight: 500; font-size: 16px">
+                  {{ Edc.Education }}
+                </li>
+              </ul>
+              <p style="margin-left: 20px; margin-top: -10px">
+                {{ Edc.Degree }}
+              </p>
+              <p style="margin-left: 20px; margin-top: -10px">
+                {{ Edc.School }}
+              </p>
+              <p style="margin-left: 20px; margin-top: -10px">
+                {{ Edc.DateAttend }}
+              </p>
+            </div>
+          </q-card-section>
+        </q-card>
+
+        <!-- Skills Card -->
+
+        <q-card
+          class="q-ma-sm col-11 col-sm-5 col-md-3 col-xl-3 col-lg-2"
+          style="height: 300px; overflow: auto; width: 250px"
+        >
+          <q-card-section style="margin-left: 10px">
+            <p
+              style="
+                font-weight: 500;
+                font-size: 16px;
+                color: darkgreen;
+                position: sticky;
+                top: 10px;
+                background-color: white;
+                z-index: 1;
+              "
+            >
+              Skills
+            </p>
+            <div
+              v-for="(skill, index) in SkillsArray"
+              :key="index"
+              style="margin-top: -10px; margin: 1px; margin-left: 10px"
+            >
+              <ul style="list-style-type: disc; padding-left: 20px">
+                <li style="font-weight: 500; font-size: 16px">
+                  {{ skill.Skills }}
+                </li>
+              </ul>
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { useLoginCheck } from "src/stores/SignUp_Store";
+import { useQuasar } from "quasar";
 export default {
   data() {
     return {
       retrievedLogin: "",
       userinfo: [],
+      WorkExpArray: [],
+      imageUrl: "/upload.jpg",
+      file: null,
       rows: [
         { name: "John Doe", age: 30, job: "Developer" },
         { name: "Jane Smith", age: 28, job: "Designer" },
@@ -112,6 +257,7 @@ export default {
         { name: "Robert Downey", age: 45, job: "Actor" },
         // Add more rows as needed
       ],
+
       rowEmployers: [
         { name: "John Doe", age: 30, job: "Developer" },
         { name: "Jane Smith", age: 28, job: "Designer" },
@@ -121,6 +267,7 @@ export default {
         { name: "Emma Watson", age: 27, job: "Actress" },
         { name: "Robert Downey", age: 45, job: "Actor" },
       ],
+
       columnEmployer: [
         {
           name: "age",
@@ -151,6 +298,11 @@ export default {
           align: "left",
         },
       ],
+      transferUser: [],
+      Profilepic: [],
+      EducArray: [],
+      SkillsArray: [],
+      trainingsdata: [],
       columns: [
         {
           name: "name",
@@ -167,6 +319,70 @@ export default {
       },
     };
   },
+
+  watch: {
+    "store.RetrievedData"(newval) {
+      this.imageUrl = newval.data[0].pic;
+    },
+  },
+
+  methods: {
+    calculateAge(birthDate) {
+      const today = new Date();
+      const dob = new Date(birthDate);
+      let age = today.getFullYear() - dob.getFullYear();
+      const monthDiff = today.getMonth() - dob.getMonth();
+
+      if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < dob.getDate())
+      ) {
+        age--;
+      }
+
+      return age;
+    },
+
+    async ImagetoDatabase() {
+      const store = useLoginCheck();
+      let data = new FormData();
+      if (this.file) {
+        data.append("file", this.file);
+      }
+      data.append("userid", this.transferUser.PMID);
+
+      store.Store_ImageDatabase(data).then((res) => {
+        /*  console.log("Response Store Image:", res.data); */
+        const store2 = useLoginCheck();
+        let data2 = new FormData();
+        data2.append("action", "view");
+        data2.append("ControlNo", this.transferUser.ControlNo);
+        store2.PersonalData(data2).then((res) => {
+          this.Profilepic = store2.PI;
+          console.log("Profile PIC", this.Profilepic);
+          this.imageUrl = this.Profilepic.personalRecord.pic;
+          this.showSuccessfullyUPdated();
+        });
+      });
+    },
+
+    triggerFileUpload() {
+      this.$refs.fileInput.click();
+    },
+    handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.file = file; // bind the file object to the data property
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.imageUrl = e.target.result; // set the image URL to the loaded file
+          this.ImagetoDatabase();
+        };
+        reader.readAsDataURL(file); // read the file as a data URL
+      }
+    },
+  },
+
   created() {
     this.retrievedLogin = localStorage.getItem("Login");
     console.log("Retrieved Login:", this.retrievedLogin); // Check the retrieved login
@@ -177,8 +393,80 @@ export default {
 
     store.RetrievedData_function(data).then((res) => {
       this.userinfo = store.RetrievedData;
+      this.transferUser = this.userinfo.data[0];
+      console.log("transferUser", this.transferUser);
+
+      const store2 = useLoginCheck();
+      let data2 = new FormData();
+      data2.append("action", "view");
+      data2.append("ControlNo", this.transferUser.ControlNo);
+      store2.PersonalData(data2).then((res) => {
+        this.Profilepic = store2.PI;
+        console.log("Profile PIC", this.Profilepic);
+        this.imageUrl = this.Profilepic.personalRecord.pic;
+      });
+
+      const store3 = useLoginCheck();
+      let data3 = new FormData();
+      data3.append("action", "view");
+      data3.append("ControlNo", this.transferUser.ControlNo);
+
+      store3.WorkExperience_Data(data3).then((res) => {
+        this.WorkExpArray = store.WE;
+
+        console.log("WorkExpe => ", this.WorkExpArray);
+      });
+
+      const store4 = useLoginCheck();
+      let data4 = new FormData();
+      data4.append("action", "view");
+      data4.append("ControlNo", this.transferUser.ControlNo);
+
+      store4.EducationalData(data4).then((res) => {
+        this.EducArray = store.EB;
+
+        console.log("Educ Background => ", this.EducArray);
+      });
+
+      const store5 = useLoginCheck();
+      let data5 = new FormData();
+      data5.append("action", "view");
+      data5.append("ControlNo", this.transferUser.ControlNo);
+
+      store5.SkillsData(data5).then((res) => {
+        this.SkillsArray = store.SH.data;
+
+        console.log("Skills => ", this.SkillsArray);
+      });
+
+      const store6 = useLoginCheck();
+      let data6 = new FormData();
+      data6.append("action", "view");
+      data6.append("ControlNo", this.transferUser.ControlNo);
+
+      store6.TrainingData(data6).then((res) => {
+        this.trainingsdata = store.LD.data;
+        console.log("TrainingData => ", this.trainingsdata);
+      });
     });
   },
+
+  setup() {
+    const $q = useQuasar();
+
+    return {
+      showSuccessfullyUPdated() {
+        $q.notify({
+          icon: "star_half",
+          color: "green",
+          message: "Sucessfully Updated",
+          position: "center",
+          timeout: "1500",
+        });
+      },
+    };
+  },
+
   computed: {
     limitedRows() {
       // Limit the rows to the number set in pagination rowsPerPage
@@ -193,6 +481,40 @@ export default {
 </script>
 
 <style scoped>
+.q-card::-webkit-scrollbar {
+  width: 4px;
+}
+
+.q-card::-webkit-scrollbar-thumb {
+  background-color: #788178; /* Scrollbar color */
+  border-radius: 5px;
+}
+
+.q-card::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Track color */
+}
+
+.classCard {
+  overflow-y: auto;
+  scrollbar-width: unset;
+}
+
+.relative-position {
+  position: relative;
+}
+
+.camera-icon {
+  right: 0;
+  bottom: 20px;
+  background-color: black;
+  color: white;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+}
+
 .profile-card {
   max-width: 80%;
   margin: auto;
@@ -209,6 +531,15 @@ export default {
   border-radius: 5px;
   overflow: hidden;
 }
+
+/* .skill-card_1 {
+  max-width: 87%;
+  margin: auto;
+  margin-left: 135px;
+  margin-top: 2%;
+  border-radius: 5px;
+  overflow: hidden;
+} */
 
 .profile-container {
   display: flex;
